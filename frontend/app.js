@@ -42,7 +42,12 @@ function normalizeBaseUrl(value) {
 
 function apiBase() {
   const saved = normalizeBaseUrl(el.apiBase.value);
-  return saved || 'http://localhost:8080';
+  if (saved) return saved;
+  // Prefer same-origin when served by Spring Boot (avoids CORS)
+  if (window.location && window.location.origin && window.location.origin !== 'null') {
+    return window.location.origin;
+  }
+  return 'http://localhost:8080';
 }
 
 function endpoint(path) {
@@ -208,7 +213,12 @@ async function loadAll() {
     setBusy(false, `Loaded ${students.length} student(s).`);
   } catch (e) {
     setBusy(false, '');
-    showBanner(e.message || String(e));
+    const msg = e?.message || String(e);
+    if (/failed to fetch|networkerror|load failed/i.test(msg)) {
+      showBanner('Cannot reach the API (backend down or blocked by CORS). Try opening the UI from http://localhost:8080/ (same origin) or set API base to match the page origin.');
+    } else {
+      showBanner(msg);
+    }
     // keep existing rows if any
   }
 }
@@ -256,7 +266,7 @@ function saveApiBase() {
 function loadApiBaseFromStorage() {
   const saved = window.localStorage.getItem(STORAGE_KEY);
   if (saved) el.apiBase.value = saved;
-  else el.apiBase.value = 'http://localhost:8080';
+  else el.apiBase.value = apiBase();
   try {
     const base = normalizeBaseUrl(el.apiBase.value);
     el.endpointPreview.textContent = `${new URL(base).origin}/students`;
