@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <title>Student CRUD</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <div class="brand__mark" aria-hidden="true">S</div>
+        <div>
+          <div class="brand__title">Student CRUD</div>
+          <div class="brand__subtitle">HTML • CSS • JavaScript</div>
+        </div>
+      </div>
+
+      <div class="api">
+        <label class="api__label" for="apiBase">API base</label>
+        <input id="apiBase" class="api__input" type="url" inputmode="url" placeholder="http://localhost:8080" />
+        <button id="apiSave" class="btn btn--ghost" type="button">Save</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container layout">
+    <section class="card">
+      <div class="card__head">
+        <div>
+          <h1 class="h">Students</h1>
+          <p class="sub">Manage records via <code>/students</code>.</p>
+        </div>
+        <div class="actions">
+          <div class="field field--search">
+            <label class="field__label" for="q">Search</label>
+            <input id="q" class="field__input" type="search" placeholder="Name, email, course…" autocomplete="off" />
+          </div>
+          <button id="refresh" class="btn" type="button">Refresh</button>
+        </div>
+      </div>
+
+      <div id="banner" class="banner" role="status" aria-live="polite" hidden></div>
+
+      <div class="tablewrap" role="region" aria-label="Students table" tabindex="0">
+        <table class="table" aria-describedby="tableHint">
+          <thead>
+            <tr>
+              <th class="col-id" scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Course</th>
+              <th class="col-actions" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            <tr class="skeleton" aria-hidden="true">
+              <td colspan="5">
+                <div class="skeleton__bar"></div>
+                <div class="skeleton__bar"></div>
+                <div class="skeleton__bar"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p id="tableHint" class="hint">Tip: click a row to load it into the form.</p>
+    </section>
+
+    <aside class="card">
+      <div class="card__head">
+        <div>
+          <h2 class="h">Create / Edit</h2>
+          <p class="sub">POST, PUT, DELETE supported.</p>
+        </div>
+        <div class="pill" id="modePill" aria-live="polite">Create</div>
+      </div>
+
+      <form id="form" class="form" autocomplete="off">
+        <div class="grid">
+          <div class="field">
+            <label class="field__label" for="id">ID</label>
+            <input id="id" class="field__input" type="text" inputmode="numeric" placeholder="(auto)" disabled />
+          </div>
+          <div class="field">
+            <label class="field__label" for="course">Course</label>
+            <input id="course" class="field__input" type="text" placeholder="e.g. Computer Science" maxlength="120" required />
+          </div>
+          <div class="field">
+            <label class="field__label" for="name">Name</label>
+            <input id="name" class="field__input" type="text" placeholder="Full name" maxlength="120" required />
+          </div>
+          <div class="field">
+            <label class="field__label" for="email">Email</label>
+            <input id="email" class="field__input" type="email" placeholder="name@example.com" maxlength="160" required />
+          </div>
+        </div>
+
+        <div class="form__buttons">
+          <button id="submit" class="btn btn--primary" type="submit">Create</button>
+          <button id="reset" class="btn btn--ghost" type="button">Reset</button>
+          <button id="delete" class="btn btn--danger" type="button" disabled>Delete</button>
+        </div>
+
+        <div class="mini" id="formStatus" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="divider"></div>
+
+      <div class="card__foot">
+        <div class="kv">
+          <div class="kv__k">Endpoint</div>
+          <div class="kv__v"><code id="endpointPreview">/students</code></div>
+        </div>
+        <div class="kv">
+          <div class="kv__k">Selected</div>
+          <div class="kv__v"><span id="selectedPreview">None</span></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>Backend stays untouched.</span>
+      <span class="dot" aria-hidden="true">•</span>
+      <a class="link" href="#" id="health">Test connection</a>
+    </div>
+  </footer>
+
+  <dialog id="confirm" class="dialog">
+    <form method="dialog" class="dialog__box">
+      <h3 class="dialog__title">Confirm delete</h3>
+      <p class="dialog__text" id="confirmText">Delete this student?</p>
+      <div class="dialog__buttons">
+        <button class="btn btn--ghost" value="cancel">Cancel</button>
+        <button class="btn btn--danger" id="confirmYes" value="yes">Delete</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

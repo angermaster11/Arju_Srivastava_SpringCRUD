@@ -1,0 +1,12 @@
+### Java / Maven
+backend/target/
+**/target/
+
+### Logs
+*.log
+
+### OS / editor
+.DS_Store
+.idea/
+.vscode/
+
